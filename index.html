@@ -43,33 +43,29 @@ body{background:var(--paper);color:var(--ink);font-family:'Noto Serif SC',serif;
 <a href="/edit.html" class="edit-fab">✏ 写简报</a>
 <script>
 async function loadIndex() {
-  var el = document.getElementById('loading');
-  var ul = document.getElementById('list');
-  var empty = document.getElementById('empty');
   try {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/api/index', true);
-    xhr.setRequestHeader('Accept', 'application/json');
-    xhr.onload = function() {
-      el.style.display = 'none';
-      var list;
-      try { list = JSON.parse(xhr.responseText); } catch(e) { el.style.display='block'; el.textContent='数据解析失败'; return; }
-      if (!Array.isArray(list) || !list.length) { empty.style.display='block'; return; }
-      ul.style.display = 'block';
-      ul.innerHTML = list.map(function(item) {
-        var d = item.date ? new Date(item.date + 'T12:00:00') : null;
-        var dateStr = d ? d.toLocaleDateString('zh-CN', {month:'2-digit', day:'2-digit', weekday:'short'}) : item.date;
-        return '<a class="brief-item" href="/brief.html?id=' + item.id + '">'
-          + '<div class="brief-date">' + dateStr + '<br>' + (item.vol ? '<span class="brief-vol">VOL.' + item.vol + '</span>' : '') + '</div>'
-          + '<div class="brief-headline">' + (item.headline || '（无标题）') + '</div>'
-          + '<div class="brief-arrow">→</div>'
-          + '</a>';
-      }).join('');
-    };
-    xhr.onerror = function() { el.textContent = '网络错误，请刷新重试'; };
-    xhr.send();
+    const res = await fetch('/api/index');
+    const text = await res.text();
+    const clean = text.replace(/[\u201c\u201d\u300c\u300d]/g, '"').replace(/[\u2018\u2019]/g, "'");
+    const list = JSON.parse(clean);
+    document.getElementById('loading').style.display = 'none';
+    if (!Array.isArray(list) || !list.length) {
+      document.getElementById('empty').style.display = 'block';
+      return;
+    }
+    const ul = document.getElementById('list');
+    ul.style.display = 'block';
+    ul.innerHTML = list.map(item => {
+      const d = item.date ? new Date(item.date + 'T12:00:00') : null;
+      const dateStr = d ? d.toLocaleDateString('zh-CN', {month:'2-digit', day:'2-digit', weekday:'short'}) : item.date;
+      return `<a class="brief-item" href="/brief.html?id=${item.id}">
+        <div class="brief-date">${dateStr}<br>${item.vol ? `<span class="brief-vol">VOL.${item.vol}</span>` : ''}</div>
+        <div class="brief-headline">${item.headline || '（无标题）'}</div>
+        <div class="brief-arrow">→</div>
+      </a>`;
+    }).join('');
   } catch(e) {
-    el.textContent = '载入失败：' + e.message;
+    document.getElementById('loading').textContent = '载入失败：' + e.message;
   }
 }
 loadIndex();
