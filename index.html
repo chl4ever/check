@@ -82,11 +82,15 @@ body{background:var(--paper);color:var(--ink);font-family:'Noto Serif SC',serif;
 <script>
 async function loadIndex() {
   try {
-    const res = await fetch('/api/index');
-    const list = await res.json();
+    const res = await fetch('/api/index', {
+      headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
+    });
+    const text = await res.text();
+    let list;
+    try { list = JSON.parse(text); } catch(e) { throw new Error('API格式错误:'+text.substring(0,50)); }
     document.getElementById('loading').style.display = 'none';
 
-    if (!list.length) {
+    if (!Array.isArray(list) || !list.length) {
       document.getElementById('empty').style.display = 'block';
       return;
     }
