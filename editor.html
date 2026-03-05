@@ -657,7 +657,7 @@ function previewBrief() {
   const data = collectData();
   const id = (data.date || '').replace(/-/g,'') || 'preview';
   sessionStorage.setItem(`brief_preview_${id}`, JSON.stringify(data));
-  window.open(`/brief/${id}?preview=1`, '_blank');
+  window.open(`/brief.html?id=${id}&preview=1`, '_blank');
 }
 
 // ── PUBLISH ──
