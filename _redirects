@@ -1,1 +1,2 @@
-/brief/* /brief.html 200
+/brief/*   /brief.html   200
+/api/*     /functions/api/:splat   200
