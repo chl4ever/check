@@ -96,7 +96,7 @@ async function loadIndex() {
     ul.innerHTML = list.map(item => {
       const d = item.date ? new Date(item.date + 'T12:00:00') : null;
       const dateStr = d ? d.toLocaleDateString('zh-CN', {month:'2-digit', day:'2-digit', weekday:'short'}) : item.date;
-      return `<a class="brief-item" href="/brief/${item.id}">
+      return `<a class="brief-item" href="/brief.html?id=${item.id}">
         <div class="brief-date">
           ${dateStr}<br>
           ${item.vol ? `<span class="brief-vol">VOL.${item.vol}</span>` : ''}
