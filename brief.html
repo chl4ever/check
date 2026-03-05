@@ -369,43 +369,46 @@ function renderBrief(d) {
 }
 
 // ── LOAD ──
+// ── LOAD ──
 async function loadBrief() {
+
+  // 1. 优先从 ?id= 读取
   let id = new URLSearchParams(location.search).get('id');
 
+  // 2. 如果没有 id，就从 /brief/xxxx 读取
   if (!id) {
-    const parts = location.pathname.split('/');
+    const path = location.pathname.replace(/\/$/, '');
+    const parts = path.split('/');
     id = parts[parts.length - 1];
   }
 
-  const isPreview = new URLSearchParams(location.search).get('preview');
-
-  if (isPreview) {
-    const raw = sessionStorage.getItem(`brief_preview_${id}`);
-    if (raw) {
-      document.getElementById('loading').style.display = 'none';
-      renderBrief(JSON.parse(raw));
-      return;
-    }
+  // 3. 如果还是没有，说明地址是 /brief
+  if (!id || id === 'brief') {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('error-msg').style.display = 'block';
+    document.getElementById('error-msg').textContent = '缺少文章ID';
+    return;
   }
 
   try {
+
     const res = await fetch(`/api/brief?id=${encodeURIComponent(id)}`);
+
     if (!res.ok) throw new Error('简报不存在');
+
     const data = await res.json();
+
     document.getElementById('loading').style.display = 'none';
+
     renderBrief(data);
+
   } catch (err) {
+
     document.getElementById('loading').style.display = 'none';
     document.getElementById('error-msg').style.display = 'block';
     document.getElementById('error-msg').textContent = `无法载入简报：${err.message}`;
-  }
-}
 
-function copyUrl() {
-  navigator.clipboard.writeText(location.href).then(() => {
-    const btns = document.querySelectorAll('.share-btn');
-    btns.forEach(b => { const orig = b.textContent; b.textContent = '✓ 已复制'; setTimeout(() => b.textContent = orig, 2000); });
-  });
+  }
 }
 
 loadBrief();
