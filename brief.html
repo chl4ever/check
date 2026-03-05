@@ -374,7 +374,7 @@ async function loadBrief() {
 
   if (!id) {
     const parts = location.pathname.split('/');
-    id = parts.pop() || parts.pop();
+    id = parts[parts.length - 1];
   }
 
   const isPreview = new URLSearchParams(location.search).get('preview');
