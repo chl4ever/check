@@ -26,6 +26,16 @@ body{background:var(--paper);color:var(--ink);font-family:'Noto Serif SC',serif;
 #loading{text-align:center;padding:40px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gray);}
 .edit-fab{position:fixed;bottom:28px;right:28px;background:var(--ink);color:var(--paper);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;padding:12px 22px;text-decoration:none;border:1px solid var(--red);}
 @media(max-width:600px){.hero{padding:32px 20px 24px;}.hero-title{font-size:38px;}.main{padding:32px 16px 80px;}.brief-item{grid-template-columns:60px 1fr 20px;gap:10px;}}
+
+/* ── 深度分析专题 ── */
+.analysis-item{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:20px 0;border-bottom:1px solid var(--divider);text-decoration:none;color:var(--ink);}
+.analysis-item:first-of-type{border-top:1px solid var(--divider);}
+.analysis-item:hover .analysis-title{color:var(--red);}
+.analysis-item:hover .brief-arrow{color:var(--red);}
+.analysis-tag{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--gold);margin-bottom:5px;}
+.analysis-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;line-height:1.4;margin-bottom:4px;transition:color 0.15s;}
+.analysis-desc{font-size:12px;color:var(--gray);line-height:1.6;}
+.analysis-section{margin-bottom:48px;}
 </style>
 </head>
 <body>
@@ -35,10 +45,30 @@ body{background:var(--paper);color:var(--ink);font-family:'Noto Serif SC',serif;
   <div class="hero-desc">每日盘前深度市场简报。聚焦重磅业绩、地缘风险、AI算力与宏观路径。</div>
 </div>
 <div class="main">
+
+  <!-- ══ 深度分析专题 ══ -->
+  <div class="section-label analysis-section-label">── 深度分析专题</div>
+  <div class="analysis-section">
+
+    <a class="analysis-item" href="/hormuz_analysis.html">
+      <div>
+        <div class="analysis-tag">DEEP DIVE · 2026.03.06 · 地缘风险</div>
+        <div class="analysis-title">霍尔木兹海峡危机全景分析</div>
+        <div class="analysis-desc">供应冲击机制 · 能源市场推演 · 亚洲暴露度 · 交易框架与投资含义</div>
+      </div>
+      <div class="brief-arrow">→</div>
+    </a>
+
+    <!-- 新增专题：复制上面 <a class="analysis-item"> 块，改链接/标题/描述 -->
+
+  </div>
+
+  <!-- ══ 往期简报存档（原有，未改动）══ -->
   <div class="section-label">── 往期简报存档</div>
   <div id="loading">载入中...</div>
   <ul class="brief-list" id="list" style="display:none;"></ul>
   <div class="empty" id="empty" style="display:none;">暂无简报，点击右下角「写简报」发布第一期。</div>
+
 </div>
 <a href="/edit.html" class="edit-fab">✏ 写简报</a>
 <script>
